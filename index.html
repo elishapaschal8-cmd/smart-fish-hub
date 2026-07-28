@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Fish Hub Tanzania</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #eaf4fb; }
+        .header { background: #1a5276; color: white; padding: 15px 20px; }
+        .header h1 { font-size: 20px; text-align:center; margin: 8px 0 5px; }
+        .header p { font-size: 12px; opacity: 0.8; text-align:center; }
+        .header-top { display:flex; justify-content:space-between; align-items:center; }
+        .card { background: white; border-radius: 12px; padding: 20px; margin: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .card h3 { color: #1a5276; margin-bottom: 15px; font-size: 15px; border-bottom: 2px solid #eaf4fb; padding-bottom: 8px; }
+        label { display: block; font-size: 13px; font-weight: bold; color: #555; margin-bottom: 4px; margin-top: 12px; }
+        input, select { width: 100%; padding: 10px 12px; border: 2px solid #d5e8f5; border-radius: 8px; font-size: 15px; color: #333; }
+        input:focus, select:focus { outline: none; border-color: #2e86c1; }
+        .btn { width: 100%; padding: 14px; background: #1a5276; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; margin-bottom: 5px; display:block; }
+        .btn:hover { background: #2e86c1; }
+        .back-btn { width: 100%; padding: 12px; background: #eaf4fb; color: #1a5276; border: 2px solid #2e86c1; border-radius: 10px; font-size: 15px; cursor: pointer; margin-top: 10px; display:block; }
+        .recommend-card { border-radius: 12px; padding: 20px; text-align: center; margin: 15px; }
+        .bora { background: #d5f5e3; border: 2px solid #27ae60; }
+        .tahadhari { background: #fef9e7; border: 2px solid #f39c12; }
+        .hatari { background: #fadbd8; border: 2px solid #e74c3c; }
+        .feed-amount { font-size: 56px; font-weight: bold; color: #1a5276; line-height: 1; }
+        .feed-unit { font-size: 14px; color: #666; margin-bottom: 10px; }
+        .category-label { font-size: 18px; font-weight: bold; margin-bottom: 5px; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 15px 15px; }
+        .info-box { background: #f4f9fd; border-radius: 8px; padding: 12px; text-align: center; }
+        .info-box .label { font-size: 11px; color: #888; margin-bottom: 4px; }
+        .info-box .value { font-size: 20px; font-weight: bold; color: #1a5276; }
+        .info-box .unit { font-size: 11px; color: #aaa; }
+        .confidence-bar { background: #e0e0e0; border-radius: 20px; height: 18px; margin: 8px 0; overflow: hidden; }
+        .confidence-fill { height: 100%; border-radius: 20px; transition: width 0.5s ease; }
+        .conf-high { background: #27ae60; }
+        .conf-mid { background: #f39c12; }
+        .conf-low { background: #e74c3c; }
+        .traffic { display: flex; gap: 8px; margin-top: 8px; }
+        .traffic-item { flex: 1; padding: 8px; border-radius: 8px; text-align: center; font-size: 12px; font-weight: bold; }
+        .t-green { background: #d5f5e3; color: #1e8449; }
+        .t-yellow { background: #fef9e7; color: #b7770d; }
+        .t-red { background: #fadbd8; color: #c0392b; }
+        .explain-box { background: #f0f8ff; border-left: 4px solid #2e86c1; border-radius: 0 8px 8px 0; padding: 14px; font-size: 13px; color: #333; line-height: 1.6; }
+        .pellet-badge { display: inline-block; background: #1a5276; color: white; padding: 4px 12px; border-radius: 20px; font-size: 13px; margin-top: 8px; }
+        .toka-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; }
+        #chat-box { min-height: 300px; max-height: 450px; overflow-y: auto; }
+        .chat-input-row { display:flex; gap:10px; align-items:center; padding: 0 15px 15px; }
+        .chat-input-row input { flex:1; margin:0; }
+        .tuma-btn { background:#922b21; color:white; border:none; padding:12px 18px; border-radius:8px; font-size:15px; cursor:pointer; white-space:nowrap; }
+        table { width:100%; border-collapse:collapse; font-size:13px; }
+        th { background:#1a5276; color:white; padding:8px; text-align:left; }
+        td { padding:8px; border-bottom:1px solid #eee; }
+    </style>
+</head>
+<body>
+    <!-- LOGIN -->
+    <div id="login-section">
+        <div style="min-height:100vh; background:linear-gradient(135deg, #1a5276 0%, #117a65 100%); display:flex; align-items:center; justify-content:center; padding:20px;">
+            <div style="background:white; border-radius:20px; padding:40px; width:100%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+                <div style="text-align:center; margin-bottom:30px;">
+                    <div style="font-size:60px;">🐟</div>
+                    <h1 style="color:#1a5276; font-size:24px; margin:10px 0 5px;">Smart Fish Hub</h1>
+                    <p style="color:#888; font-size:13px;">Tanzania — AOS Engine</p>
+                </div>
+                <div style="display:flex; margin-bottom:25px; background:#f4f9fd; border-radius:10px; padding:4px;">
+                    <button id="tab-ingia" onclick="showTab('ingia')" style="flex:1; padding:10px; border:none; border-radius:8px; background:#1a5276; color:white; font-size:14px; cursor:pointer; font-weight:bold;">Ingia</button>
+                    <button id="tab-sajili" onclick="showTab('sajili')" style="flex:1; padding:10px; border:none; border-radius:8px; background:transparent; color:#888; font-size:14px; cursor:pointer;">Sajili</button>
+                </div>
+                <div id="fomu-ingia">
+                    <label style="display:block; font-size:13px; font-weight:bold; color:#555; margin-bottom:5px;">Namba ya Simu</label>
+                    <input id="ingia-simu" type="tel" placeholder="0712345678" style="width:100%; padding:12px; border:2px solid #d5e8f5; border-radius:8px; font-size:15px; box-sizing:border-box; margin-bottom:15px;">
+                    <label style="display:block; font-size:13px; font-weight:bold; color:#555; margin-bottom:5px;">Nywila</label>
+                    <input id="ingia-nywila" type="password" placeholder="Weka nywila yako" style="width:100%; padding:12px; border:2px solid #d5e8f5; border-radius:8px; font-size:15px; box-sizing:border-box; margin-bottom:20px;">
+                    <button onclick="fanyaIngia()" style="width:100%; padding:14px; background:#1a5276; color:white; border:none; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer;">🔐 Ingia</button>
+                </div>
+                <div id="fomu-sajili" style="display:none;">
+                    <label style="display:block; font-size:13px; font-weight:bold; color:#555; margin-bottom:5px;">Jina Lako Kamili</label>
+                    <input id="sajili-jina" type="text" placeholder="Mfano: Elipa Pascal" style="width:100%; padding:12px; border:2px solid #d5e8f5; border-radius:8px; font-size:15px; box-sizing:border-box; margin-bottom:15px;">
+                    <label style="display:block; font-size:13px; font-weight:bold; color:#555; margin-bottom:5px;">Namba ya Simu</label>
+                    <input id="sajili-simu" type="tel" placeholder="0712345678" style="width:100%; padding:12px; border:2px solid #d5e8f5; border-radius:8px; font-size:15px; box-sizing:border-box; margin-bottom:15px;">
+                    <label style="display:block; font-size:13px; font-weight:bold; color:#555; margin-bottom:5px;">Nywila</label>
+                    <input id="sajili-nywila" type="password" placeholder="Tengeneza nywila" style="width:100%; padding:12px; border:2px solid #d5e8f5; border-radius:8px; font-size:15px; box-sizing:border-box; margin-bottom:15px;">
+                    <label style="display:block; font-size:13px; font-weight:bold; color:#555; margin-bottom:5px;">Mimi ni</label>
+                    <select id="sajili-role" style="width:100%; padding:12px; border:2px solid #d5e8f5; border-radius:8px; font-size:15px; box-sizing:border-box; margin-bottom:20px;">
+                        <option value="mfugaji">🌱 Mfugaji wa Samaki</option>
+                        <option value="mnunuzi">🛒 Mnunuzi wa Samaki</option>
+                        <option value="duka">🏪 Duka la Pembejeo</option>
+                        <option value="mtaalam">👨‍🔬 Mtaalam wa Samaki</option>
+                    </select>
+                    <button onclick="fanyaSajili()" style="width:100%; padding:14px; background:#117a65; color:white; border:none; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer;">✅ Sajili Sasa</button>
+                </div>
+                <div id="auth-ujumbe" style="display:none; margin-top:15px; padding:12px; border-radius:8px; text-align:center; font-size:14px;"></div>
+            </div>
+        </div>
+    </div><!-- MFUMO MKUU -->
+    <div id="mfumo-section" style="display:none;">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-top">
+                <span id="user-jina" style="font-size:12px; opacity:0.8;"></span>
+                <button class="toka-btn" onclick="toka()">Toka 🚪</button>
+            </div>
+            <h1>🐟 Smart Fish Hub Tanzania</h1>
+            <p>AOS Engine — Digital Farm Brain</p>
+        </div>
+
+        <!-- NAV VITUFE -->
+        <div style="padding:15px 15px 0;">
+            <div id="btn-kulisha" style="display:none;">
+                <button class="btn" onclick="onyeshaKulisha()">🧠 Pata Ushauri wa Kulisha</button>
+            </div>
+            <div id="btn-maji" style="display:none;">
+                <button class="btn" style="background:#117a65;" onclick="onyeshaMaji()">💧 Angalia Ubora wa Maji</button>
+            </div>
+            <div id="btn-fcr" style="display:none;">
+                <button class="btn" style="background:#6c3483;" onclick="onyeshaFCR()">📊 Hesabu FCR</button>
+            </div>
+            <div id="btn-mavuno" style="display:none;">
+                <button class="btn" style="background:#b7770d;" onclick="onyeshaMavuno()">🌾 Tabiri Mavuno na Faida</button>
+            </div>
+            <div id="btn-daktari" style="display:none;">
+                <button class="btn" style="background:#922b21;" onclick="onyeshaDaktari()">🏥 Daktari wa Samaki — AI</button>
+            </div>
+            <div id="btn-historia" style="display:none;">
+                <button class="btn" style="background:#1a5276;" onclick="onyeshaHistoria()">📋 Historia ya Rekodi</button>
+            </div>
+            <div id="btn-soko" style="display:none;">
+                <button class="btn" style="background:#117a65;" onclick="onyeshaSoko()">🛒 Soko la Samaki</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: KULISHA -->
+        <div id="sehemu-kulisha" style="display:none;">
+            <div class="card">
+                <h3>📋 Taarifa za Bwawa</h3>
+                <label>Idadi ya Samaki:</label>
+                <input type="number" id="idadi" placeholder="Mfano: 500">
+                <label>Uzito wa Mmoja — ABW (gramu):</label>
+                <input type="number" id="abw" placeholder="Mfano: 52">
+            </div>
+            <div class="card">
+                <h3>💧 Hali ya Maji</h3>
+                <label>Joto la Maji (°C):</label>
+                <input type="number" id="joto" placeholder="Mfano: 28" step="0.1">
+                <label>Oksijeni — DO (mg/L):</label>
+                <input type="number" id="do_mg" placeholder="Mfano: 5.5" step="0.1">
+            </div>
+            <div class="card">
+                <h3>🐠 Tabia ya Samaki</h3>
+                <label>Feed Response:</label>
+                <select id="feed_response">
+                    <option value="Normal">Normal — Walikula kawaida</option>
+                    <option value="Aggressive">Aggressive — Walikula kwa nguvu</option>
+                    <option value="Slow">Slow — Walikula polepole</option>
+                    <option value="No Feeding">No Feeding — Hawakula</option>
+                </select>
+            </div>
+            <div style="padding:0 15px;">
+                <button class="btn" onclick="hesabu()">🧠 Hesabu Kiasi cha Kulisha</button>
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: DASHBOARD YA KULISHA -->
+        <div id="sehemu-dashboard" style="display:none;">
+            <div class="recommend-card" id="main-card">
+                <div class="category-label" id="category-label"></div>
+                <div class="feed-amount" id="feed-amount"></div>
+                <div class="feed-unit">kilo za chakula leo</div>
+                <div class="pellet-badge" id="pellet-badge"></div>
+            </div>
+            <div class="info-grid">
+                <div class="info-box"><div class="label">Biomass</div><div class="value" id="biomass"></div><div class="unit">kilo</div></div>
+                <div class="info-box"><div class="label">Chakula cha Msingi</div><div class="value" id="target-feed"></div><div class="unit">kilo</div></div>
+                <div class="info-box"><div class="label">Mara/Siku</div><div class="value" id="frequency"></div><div class="unit">kila mara: <span id="per-feed"></span> kg</div></div>
+                <div class="info-box"><div class="label">EM</div><div class="value" id="em-value"></div><div class="unit">multiplier</div></div>
+            </div>
+            <div class="card">
+                <h3>💧 Hali ya Maji</h3>
+                <div class="traffic">
+                    <div class="traffic-item" id="temp-light"></div>
+                    <div class="traffic-item" id="do-light"></div>
+                    <div class="traffic-item" id="response-light"></div>
+                </div>
+            </div>
+            <div class="card">
+                <h3>📊 Confidence Score</h3>
+                <div style="display:flex; justify-content:space-between; font-size:13px;">
+                    <span id="conf-label"></span><strong id="conf-value"></strong>
+                </div>
+                <div class="confidence-bar"><div class="confidence-fill" id="conf-fill"></div></div>
+            </div>
+            <div class="card">
+                <h3>💡 Sababu ya Ushauri</h3>
+                <div class="explain-box" id="explain-box"></div>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: MAJI -->
+        <div id="sehemu-maji" style="display:none;">
+            <div class="card">
+                <h3>🏊 Aina ya Mfumo</h3>
+                <select id="aina_mfumo">
+                    <option value="pond">🌱 Bwawa la Udongo (Earth Pond)</option>
+                    <option value="concrete">🏗️ Bwawa la Zege (Concrete Pond)</option>
+                    <option value="liner">🛡️ Bwawa la Liner (Liner Pond)</option>
+                    <option value="cage">🥅 Kisimba (Cage)</option>
+                    <option value="ras">⚙️ Mfumo wa Mzunguko (RAS)</option>
+                    <option value="tank">🪣 Tanki (Tank)</option>
+                </select>
+            </div>
+            <div class="card">
+                <h3>💧 Vigezo vya Maji</h3>
+                <label>Oksijeni — DO (mg/L):</label>
+                <input type="number" id="m_oxygen" placeholder="Mfano: 5.5" step="0.1">
+                <label>Joto la Maji (°C):</label>
+                <input type="number" id="m_temp" placeholder="Mfano: 28" step="0.1">
+                <label>pH ya Maji:</label>
+                <input type="number" id="m_ph" placeholder="Mfano: 7.2" step="0.1">
+            </div>
+            <div style="padding:0 15px;">
+                <button class="btn" style="background:#117a65;" onclick="hesabuMaji()">🔬 Changanua Ubora wa Maji</button>
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: MATOKEO YA MAJI -->
+        <div id="sehemu-maji-matokeo" style="display:none;">
+            <div class="recommend-card" id="maji-main-card">
+                <div class="category-label" id="maji-jumla-label"></div>
+                <p style="margin-top:10px; font-size:14px;" id="maji-aina-label"></p>
+            </div>
+            <div class="card">
+                <h3>🫧 Oksijeni (DO)</h3>
+                <div class="traffic"><div class="traffic-item" id="o2-status"></div></div>
+                <div class="explain-box" style="margin-top:10px;" id="o2-ushauri"></div>
+            </div>
+            <div class="card">
+                <h3>🌡️ Joto la Maji</h3>
+                <div class="traffic"><div class="traffic-item" id="temp-status"></div></div>
+                <div class="explain-box" style="margin-top:10px;" id="temp-ushauri"></div>
+            </div>
+            <div class="card">
+                <h3>⚗️ pH ya Maji</h3>
+                <div class="traffic"><div class="traffic-item" id="ph-status"></div></div>
+                <div class="explain-box" style="margin-top:10px;" id="ph-ushauri"></div>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: FCR -->
+        <div id="sehemu-fcr" style="display:none;">
+            <div class="card">
+                <h3>📖 FCR ni Nini?</h3>
+                <div class="explain-box">FCR = Chakula (kg) ÷ Ongezeko la Uzito (kg). FCR ndogo = Faida zaidi!</div>
+            </div>
+            <div class="card">
+                <h3>📋 Jaza Taarifa</h3>
+                <label>Chakula Kilichotumika (kg):</label>
+                <input type="number" id="fcr_chakula" placeholder="Mfano: 100" step="0.1">
+                <label>Uzito wa Samaki Mwanzo (kg):</label>
+                <input type="number" id="fcr_awali" placeholder="Mfano: 200" step="0.1">
+                <label>Uzito wa Samaki Sasa (kg):</label>
+                <input type="number" id="fcr_mwisho" placeholder="Mfano: 260" step="0.1">
+            </div>
+            <div style="padding:0 15px;">
+                <button class="btn" style="background:#6c3483;" onclick="hesabuFCR()">🧮 Hesabu FCR</button>
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: MATOKEO YA FCR -->
+        <div id="sehemu-fcr-matokeo" style="display:none;">
+            <div class="recommend-card" id="fcr-main-card">
+                <div style="font-size:48px;" id="fcr-emoji"></div>
+                <div class="category-label" id="fcr-tathmini"></div>
+                <div class="feed-amount" id="fcr-namba"></div>
+                <div class="feed-unit">FCR yako</div>
+            </div>
+            <div class="info-grid">
+                <div class="info-box"><div class="label">Chakula</div><div class="value" id="fcr-chakula-out"></div><div class="unit">kilo</div></div>
+                <div class="info-box"><div class="label">Ongezeko</div><div class="value" id="fcr-ongezeko"></div><div class="unit">kilo</div></div>
+            </div>
+            <div class="card">
+                <h3>💡 Ushauri wa AOS Engine</h3>
+                <div class="explain-box" id="fcr-ushauri"></div>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: MAVUNO -->
+        <div id="sehemu-mavuno" style="display:none;">
+            <div class="card">
+                <h3>🐟 Taarifa za Samaki</h3>
+                <label>Idadi ya Samaki:</label>
+                <input type="number" id="mv_idadi" placeholder="Mfano: 500">
+                <label>Uzito wa Mmoja Sasa (gramu):</label>
+                <input type="number" id="mv_uzito_sasa" placeholder="Mfano: 250">
+                <label>Uzito Unaotarajiwa Kuvuna (gramu):</label>
+                <input type="number" id="mv_uzito_lengo" placeholder="Mfano: 450">
+                <label>Bei ya Soko (Tsh/kg):</label>
+                <input type="number" id="mv_bei" placeholder="Mfano: 8000">
+            </div>
+            <div class="card">
+                <h3>💰 Gharama (Tsh)</h3>
+                <label>Gharama ya Vifaranga:</label>
+                <input type="number" id="mv_vifaranga" placeholder="Mfano: 200000">
+                <label>Gharama ya Chakula:</label>
+                <input type="number" id="mv_chakula" placeholder="Mfano: 800000">
+                <label>Gharama Nyingine:</label>
+                <input type="number" id="mv_nyingine" placeholder="Mfano: 100000">
+            </div>
+            <div style="padding:0 15px;">
+                <button class="btn" style="background:#b7770d;" onclick="hesabuMavuno()">🧮 Tabiri Mavuno</button>
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: MATOKEO YA MAVUNO -->
+        <div id="sehemu-mavuno-matokeo" style="display:none;">
+            <div class="recommend-card" id="mavuno-main-card">
+                <div style="font-size:48px;" id="mavuno-emoji"></div>
+                <div class="category-label" id="mavuno-tathmini"></div>
+                <div class="feed-amount" id="mavuno-faida"></div>
+                <div class="feed-unit">Tsh — Faida Halisi</div>
+            </div>
+            <div class="info-grid">
+                <div class="info-box"><div class="label">Uzito wa Mavuno</div><div class="value" id="mv-uzito-lengo"></div><div class="unit">kilo</div></div>
+                <div class="info-box"><div class="label">Mapato Ghafi</div><div class="value" id="mv-mapato"></div><div class="unit">Tsh</div></div>
+                <div class="info-box"><div class="label">Gharama Jumla</div><div class="value" id="mv-gharama"></div><div class="unit">Tsh</div></div>
+                <div class="info-box"><div class="label">Profit Margin</div><div class="value" id="mv-margin"></div><div class="unit">%</div></div>
+            </div>
+            <div class="card">
+                <h3>💡 Ushauri wa AOS Engine</h3>
+                <div class="explain-box" id="mavuno-ushauri"></div>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: DAKTARI -->
+        <div id="sehemu-daktari" style="display:none;">
+            <div class="header" style="background:#922b21;">
+                <h1>🏥 Daktari wa Samaki</h1>
+                <p>AI inayokusaidia kutambua magonjwa</p>
+            </div>
+            <div class="card" id="chat-box">
+                <div id="messages"></div>
+            </div>
+            <div class="chat-input-row">
+                <input type="text" id="user-input" placeholder="Elezea dalili unayoiona..." onkeypress="if(event.key==='Enter') tumaDaktari()">
+                <button class="tuma-btn" onclick="tumaDaktari()">Tuma 📤</button>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: HISTORIA -->
+        <div id="sehemu-historia" style="display:none;">
+            <div class="card" style="overflow-x:auto;">
+                <h3>📊 Rekodi za Hivi Karibuni</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tarehe</th>
+                            <th>Samaki</th>
+                            <th>ABW</th>
+                            <th>Chakula</th>
+                            <th>Hali</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historia-body">
+                        <tr><td colspan="5" style="text-align:center; padding:20px; color:#aaa;">Inapakia...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+        <!-- SEHEMU: SOKO -->
+        <div id="sehemu-soko" style="display:none;">
+            <div class="card">
+                <h3>🛒 Soko la Samaki</h3>
+                <div class="explain-box">Soko linakuja hivi karibuni! Utaweza kuuza na kununua samaki hapa.</div>
+            </div>
+            <div style="padding:0 15px 15px;">
+                <button class="back-btn" onclick="rudinyumbani()">← Rudi</button>
+            </div>
+        </div>
+
+    </div>
+    <script>
+let mtumiaji_wa_sasa = null;
+let historiaDaktari = [];
+let daktariAmeanza = false;
+
+// ============ AUTH ============
+function showTab(tab) {
+    document.getElementById('fomu-ingia').style.display = tab==='ingia'?'block':'none';
+    document.getElementById('fomu-sajili').style.display = tab==='sajili'?'block':'none';
+    document.getElementById('tab-ingia').style.background = tab==='ingia'?'#1a5276':'transparent';
+    document.getElementById('tab-ingia').style.color = tab==='ingia'?'white':'#888';
+    document.getElementById('tab-sajili').style.background = tab==='sajili'?'#1a5276':'transparent';
+    document.getElementById('tab-sajili').style.color = tab==='sajili'?'white':'#888';
+    document.getElementById('auth-ujumbe').style.display = 'none';
+}
+
+function onyeshaUjumbeAuth(ujumbe, ni_kosa) {
+    const el = document.getElementById('auth-ujumbe');
+    el.textContent = ujumbe;
+    el.style.display = 'block';
+    el.style.background = ni_kosa?'#fadbd8':'#d5f5e3';
+    el.style.color = ni_kosa?'#c0392b':'#1e8449';
+}
+
+async function fanyaIngia() {
+    const simu = document.getElementById('ingia-simu').value.trim();
+    const nywila = document.getElementById('ingia-nywila').value;
+    if (!simu||!nywila){onyeshaUjumbeAuth('Jaza simu na nywila!',true);return;}
+    const jibu = await fetch('/ingia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({simu,nywila})});
+    const data = await jibu.json();
+    if(data.kosa){onyeshaUjumbeAuth(data.ujumbe,true);}
+    else{
+        localStorage.setItem('sfh_token',data.token);
+        localStorage.setItem('sfh_user',JSON.stringify({jina:data.jina,role:data.role}));
+        mtumiaji_wa_sasa={jina:data.jina,role:data.role};
+        ingiaKwenyeMfumo();
+    }
+}
+
+async function fanyaSajili() {
+    const jina = document.getElementById('sajili-jina').value.trim();
+    const simu = document.getElementById('sajili-simu').value.trim();
+    const nywila = document.getElementById('sajili-nywila').value;
+    const role = document.getElementById('sajili-role').value;
+    if(!jina||!simu||!nywila){onyeshaUjumbeAuth('Jaza taarifa zote!',true);return;}
+    const jibu = await fetch('/sajili',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jina,simu,nywila,role})});
+    const data = await jibu.json();
+    if(data.kosa){onyeshaUjumbeAuth(data.ujumbe,true);}
+    else{onyeshaUjumbeAuth('Umesajiliwa! Sasa ingia.',false);setTimeout(()=>showTab('ingia'),1500);}
+}
+
+function ingiaKwenyeMfumo() {
+    document.getElementById('login-section').style.display='none';
+    document.getElementById('mfumo-section').style.display='block';
+    document.getElementById('user-jina').textContent='👤 '+mtumiaji_wa_sasa.jina;
+    const role = mtumiaji_wa_sasa.role;
+    const vitufe_vyote=['btn-kulisha','btn-maji','btn-fcr','btn-mavuno','btn-daktari','btn-historia','btn-soko'];
+    vitufe_vyote.forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.style.display='none';
+    });
+    const vitufe_za_role={
+        mfugaji:['btn-kulisha','btn-maji','btn-fcr','btn-mavuno','btn-daktari','btn-historia'],
+        mnunuzi:['btn-soko'],
+        duka:['btn-soko'],
+        mtaalam:['btn-kulisha','btn-maji','btn-daktari']
+    };
+    const vya_mtumiaji = vitufe_za_role[role]||vitufe_za_role['mfugaji'];
+    vya_mtumiaji.forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.style.display='block';
+    });
+}
+
+function toka() {
+    localStorage.removeItem('sfh_token');
+    localStorage.removeItem('sfh_user');
+    mtumiaji_wa_sasa=null;
+    document.getElementById('login-section').style.display='block';
+    document.getElementById('mfumo-section').style.display='none';
+}
+
+// ============ NAVIGATION ============
+function fichaSehemu() {
+    ['sehemu-kulisha','sehemu-dashboard','sehemu-maji','sehemu-maji-matokeo',
+     'sehemu-fcr','sehemu-fcr-matokeo','sehemu-mavuno','sehemu-mavuno-matokeo',
+     'sehemu-daktari','sehemu-historia','sehemu-soko'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.style.display='none';
+    });
+}
+
+function rudinyumbani() {
+    fichaSehemu();
+    window.scrollTo(0,0);
+}
+
+function onyeshaKulisha(){fichaSehemu();document.getElementById('sehemu-kulisha').style.display='block';window.scrollTo(0,0);}
+function onyeshaMaji(){fichaSehemu();document.getElementById('sehemu-maji').style.display='block';window.scrollTo(0,0);}
+function onyeshaFCR(){fichaSehemu();document.getElementById('sehemu-fcr').style.display='block';window.scrollTo(0,0);}
+function onyeshaMavuno(){fichaSehemu();document.getElementById('sehemu-mavuno').style.display='block';window.scrollTo(0,0);}
+function onyeshaHistoria(){fichaSehemu();document.getElementById('sehemu-historia').style.display='block';pakuaHistoria();window.scrollTo(0,0);}
+function onyeshaSoko(){fichaSehemu();document.getElementById('sehemu-soko').style.display='block';window.scrollTo(0,0);}
+
+function onyeshaDaktari(){
+    fichaSehemu();
+    document.getElementById('sehemu-daktari').style.display='block';
+    if(!daktariAmeanza){
+        daktariAmeanza=true;
+        historiaDaktari=[];
+        document.getElementById('messages').innerHTML='';
+        const ujumbe='Habari daktari, nahitaji msaada';
+        historiaDaktari.push({role:'user',content:ujumbe});
+        onyeshaUjumbeChat('user',ujumbe);
+        onyeshaUpakiaji();
+        fetch('/daktari',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({historia:historiaDaktari})})
+        .then(r=>r.json()).then(data=>{
+            futoUpakiaji();
+            if(!data.kosa){historiaDaktari.push({role:'assistant',content:data.jibu});onyeshaUjumbeChat('daktari',data.jibu);}
+        });
+    }
+    window.scrollTo(0,0);
+}
+
+// ============ KULISHA ============
+async function hesabu() {
+    const idadi=document.getElementById('idadi').value;
+    const abw=document.getElementById('abw').value;
+    const joto=document.getElementById('joto').value;
+    const do_mg=document.getElementById('do_mg').value;
+    const feed_response=document.getElementById('feed_response').value;
+    if(!idadi||!abw||!joto||!do_mg){alert('Jaza taarifa zote!');return;}
+    const jibu=await fetch('/kulisha',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idadi:Number(idadi),abw:Number(abw),joto:Number(joto),do_mg:Number(do_mg),feed_response})});
+    const d=await jibu.json();
+    document.getElementById('feed-amount').textContent=d.adjusted_feed_kg;
+    document.getElementById('category-label').textContent=d.category;
+    document.getElementById('pellet-badge').textContent='🔵 Pellet: '+d.pellet_size+' | Mara '+d.frequency+'/siku';
+    document.getElementById('biomass').textContent=d.biomass_kg;
+    document.getElementById('target-feed').textContent=d.target_feed_kg;
+    document.getElementById('frequency').textContent=d.frequency;
+    document.getElementById('per-feed').textContent=(d.adjusted_feed_kg/d.frequency).toFixed(2);
+    document.getElementById('em-value').textContent=d.environmental_multiplier;
+    const mc=document.getElementById('main-card');
+    mc.className='recommend-card '+d.hali;
+    const tl=document.getElementById('temp-light');
+    tl.textContent='🌡️ '+joto+'°C — '+d.temp_status;
+    tl.className='traffic-item '+(d.temp_multiplier===1?'t-green':d.temp_multiplier>=0.85?'t-yellow':'t-red');
+    const dl=document.getElementById('do-light');
+    dl.textContent='💧 '+do_mg+' mg/L — '+d.do_status;
+    dl.className='traffic-item '+(d.do_multiplier===1?'t-green':d.do_multiplier>0?'t-yellow':'t-red');
+    const rl=document.getElementById('response-light');
+    rl.textContent='🐠 '+feed_response;
+    rl.className='traffic-item '+(d.response_multiplier>=1?'t-green':d.response_multiplier>=0.85?'t-yellow':'t-red');
+    const conf=d.confidence;
+    document.getElementById('conf-value').textContent=conf+'%';
+    const fill=document.getElementById('conf-fill');
+    fill.style.width=conf+'%';
+    fill.className='confidence-fill '+(conf>=85?'conf-high':conf>=70?'conf-mid':'conf-low');
+    document.getElementById('conf-label').textContent=conf>=95?'✅ Uaminifu wa Juu Sana':conf>=85?'✅ Uaminifu wa Juu':conf>=70?'⚠️ Wastani':'🔴 Kusanya Data Zaidi';
+    document.getElementById('explain-box').textContent=d.sababu;
+    fichaSehemu();
+    document.getElementById('sehemu-dashboard').style.display='block';
+    window.scrollTo(0,0);
+}
+
+// ============ MAJI ============
+async function hesabuMaji() {
+    const oxygen=document.getElementById('m_oxygen').value;
+    const temp=document.getElementById('m_temp').value;
+    const ph=document.getElementById('m_ph').value;
+    const aina_mfumo=document.getElementById('aina_mfumo').value;
+    if(!oxygen||!temp||!ph){alert('Jaza vigezo vyote!');return;}
+    const jibu=await fetch('/maji',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({oxygen:Number(oxygen),temp:Number(temp),ph:Number(ph),aina_mfumo})});
+    const d=await jibu.json();
+    const mc=document.getElementById('maji-main-card');
+    mc.className='recommend-card '+d.hali_jumla;
+    const aina_names={pond:'🌱 Bwawa la Udongo',concrete:'🏗️ Bwawa la Zege',liner:'🛡️ Bwawa la Liner',cage:'🥅 Kisimba',ras:'⚙️ RAS',tank:'🪣 Tanki'};
+    document.getElementById('maji-jumla-label').textContent=d.hali_jumla==='bora'?'✅ Maji Yako Yako Vizuri!':d.hali_jumla==='tahadhari'?'⚠️ Maji Yanahitaji Uangalifu':'🚨 HATUA YA HARAKA!';
+    document.getElementById('maji-aina-label').textContent='Mfumo: '+aina_names[d.aina_mfumo];
+    const o2El=document.getElementById('o2-status');
+    o2El.textContent='🫧 DO: '+oxygen+' mg/L — '+d.oxygen.hali;
+    o2El.className='traffic-item '+(d.oxygen.color==='bora'?'t-green':d.oxygen.color==='tahadhari'?'t-yellow':'t-red');
+    document.getElementById('o2-ushauri').textContent=d.oxygen.ushauri;
+    const tEl=document.getElementById('temp-status');
+    tEl.textContent='🌡️ Joto: '+temp+'°C — '+d.temperature.hali;
+    tEl.className='traffic-item '+(d.temperature.color==='bora'?'t-green':d.temperature.color==='tahadhari'?'t-yellow':'t-red');
+    document.getElementById('temp-ushauri').textContent=d.temperature.ushauri;
+    const phEl=document.getElementById('ph-status');
+    phEl.textContent='⚗️ pH: '+ph+' — '+d.ph.hali;
+    phEl.className='traffic-item '+(d.ph.color==='bora'?'t-green':d.ph.color==='tahadhari'?'t-yellow':'t-red');
+    document.getElementById('ph-ushauri').textContent=d.ph.ushauri;
+    fichaSehemu();
+    document.getElementById('sehemu-maji-matokeo').style.display='block';
+    window.scrollTo(0,0);
+}
+
+// ============ FCR ============
+async function hesabuFCR() {
+    const chakula=document.getElementById('fcr_chakula').value;
+    const awali=document.getElementById('fcr_awali').value;
+    const mwisho=document.getElementById('fcr_mwisho').value;
+    if(!chakula||!awali||!mwisho){alert('Jaza taarifa zote!');return;}
+    const jibu=await fetch('/fcr',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({chakula_kg:Number(chakula),uzito_awali_kg:Number(awali),uzito_mwisho_kg:Number(mwisho)})});
+    const d=await jibu.json();
+    if(d.kosa){alert(d.ujumbe);return;}
+    document.getElementById('fcr-main-card').className='recommend-card '+d.hali;
+    document.getElementById('fcr-emoji').textContent=d.emoji;
+    document.getElementById('fcr-tathmini').textContent=d.tathmini;
+    document.getElementById('fcr-namba').textContent=d.fcr;
+    document.getElementById('fcr-chakula-out').textContent=d.chakula_kg;
+    document.getElementById('fcr-ongezeko').textContent=d.ongezeko_kg;
+    document.getElementById('fcr-ushauri').textContent=d.ushauri;
+    fichaSehemu();
+    document.getElementById('sehemu-fcr-matokeo').style.display='block';
+    window.scrollTo(0,0);
+}
+
+// ============ MAVUNO ============
+async function hesabuMavuno() {
+    const idadi=document.getElementById('mv_idadi').value;
+    const uzito_sasa=document.getElementById('mv_uzito_sasa').value;
+    const uzito_lengo=document.getElementById('mv_uzito_lengo').value;
+    const bei=document.getElementById('mv_bei').value;
+    const vifaranga=document.getElementById('mv_vifaranga').value||0;
+    const chakula=document.getElementById('mv_chakula').value||0;
+    const nyingine=document.getElementById('mv_nyingine').value||0;
+    if(!idadi||!uzito_sasa||!uzito_lengo||!bei){alert('Jaza taarifa za lazima!');return;}
+    const jibu=await fetch('/mavuno',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idadi_samaki:Number(idadi),uzito_sasa_g:Number(uzito_sasa),uzito_lengo_g:Number(uzito_lengo),bei_soko_kg:Number(bei),gharama_vifaranga:Number(vifaranga),gharama_chakula:Number(chakula),gharama_nyingine:Number(nyingine)})});
+    const d=await jibu.json();
+    if(d.kosa){alert(d.ujumbe);return;}
+    document.getElementById('mavuno-main-card').className='recommend-card '+d.hali;
+    document.getElementById('mavuno-emoji').textContent=d.emoji;
+    document.getElementById('mavuno-tathmini').textContent=d.tathmini;
+    document.getElementById('mavuno-faida').textContent=Number(d.faida_halisi).toLocaleString();
+    document.getElementById('mv-uzito-lengo').textContent=d.uzito_lengo_kg;
+    document.getElementById('mv-mapato').textContent=Number(d.mapato_ghafi).toLocaleString();
+    document.getElementById('mv-gharama').textContent=Number(d.gharama_jumla).toLocaleString();
+    document.getElementById('mv-margin').textContent=d.profit_margin;
+    document.getElementById('mavuno-ushauri').textContent=d.ushauri;
+    fichaSehemu();
+    document.getElementById('sehemu-mavuno-matokeo').style.display='block';
+    window.scrollTo(0,0);
+}
+
+// ============ HISTORIA ============
+async function pakuaHistoria() {
+    const jibu=await fetch('/historia');
+    const data=await jibu.json();
+    let rows='';
+    data.forEach(r=>{
+        const hali=r.environmental_multiplier>=1?'🟢':r.environmental_multiplier>0?'🟡':'🔴';
+        rows+=`<tr><td>${r.recorded_at.slice(0,16)}</td><td>${r.idadi}</td><td>${r.abw_gramu}g</td><td>${r.adjusted_feed_kg}kg</td><td>${hali} ${r.category}</td></tr>`;
+    });
+    document.getElementById('historia-body').innerHTML=rows||'<tr><td colspan="5" style="text-align:center;">Hakuna rekodi bado</td></tr>';
+}
+
+// ============ DAKTARI ============
+async function tumaDaktari() {
+    const input=document.getElementById('user-input');
+    const ujumbe=input.value.trim();
+    if(!ujumbe)return;
+    input.value='';
+    onyeshaUjumbeChat('user',ujumbe);
+    historiaDaktari.push({role:'user',content:ujumbe});
+    onyeshaUpakiaji();
+    const jibu=await fetch('/daktari',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({historia:historiaDaktari})});
+    const data=await jibu.json();
+    futoUpakiaji();
+    if(!data.kosa){historiaDaktari.push({role:'assistant',content:data.jibu});onyeshaUjumbeChat('daktari',data.jibu);}
+    else{onyeshaUjumbeChat('daktari','⚠️ '+data.ujumbe);}
+}
+
+function onyeshaUjumbeChat(aina,ujumbe) {
+    const messages=document.getElementById('messages');
+    const div=document.createElement('div');
+    div.style.cssText=`margin:10px 0;padding:12px 15px;border-radius:12px;max-width:85%;font-size:14px;line-height:1.5;${aina==='user'?'background:#1a5276;color:white;margin-left:auto;text-align:right;':'background:#f0f8ff;color:#333;border-left:4px solid #922b21;'}`;
+    div.textContent=(aina==='daktari'?'🏥 Daktari: ':'👤 Wewe: ')+ujumbe;
+    messages.appendChild(div);
+    const chatBox=document.getElementById('chat-box');
+    chatBox.scrollTop=chatBox.scrollHeight;
+}
+
+function onyeshaUpakiaji() {
+    const messages=document.getElementById('messages');
+    const div=document.createElement('div');
+    div.id='upakiaji';
+    div.style.cssText='background:#f0f8ff;padding:12px;border-radius:12px;color:#922b21;font-size:14px;border-left:4px solid #922b21;';
+    div.textContent='🏥 Daktari anafikiri...';
+    messages.appendChild(div);
+    document.getElementById('chat-box').scrollTop=document.getElementById('chat-box').scrollHeight;
+}
+
+function futoUpakiaji() {
+    const el=document.getElementById('upakiaji');
+    if(el)el.remove();
+}
+
+// ============ WINDOW ONLOAD ============
+window.onload = function() {
+    document.getElementById('mfumo-section').style.display='none';
+    const token=localStorage.getItem('sfh_token');
+    const user=localStorage.getItem('sfh_user');
+    if(token&&user){
+        mtumiaji_wa_sasa=JSON.parse(user);
+        document.getElementById('login-section').style.display='none';
+        ingiaKwenyeMfumo();
+    } else {
+        document.getElementById('login-section').style.display='block';
+    }
+};
+</script>
+</body>
+</html>
