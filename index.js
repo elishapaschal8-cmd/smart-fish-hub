@@ -327,9 +327,10 @@ app.post('/kulisha', (req, res) => {
   const { idadi, abw, joto, do_mg, feed_response } = req.body;
   if (!idadi || !abw || joto === undefined || do_mg === undefined) return res.json({ kosa: 'Jaza: idadi, abw, joto, do_mg' });
   const matokeo = hesabuKulisha({ idadi: Number(idadi), abw: Number(abw), joto: Number(joto), do_mg: Number(do_mg), feed_response: feed_response || 'Normal' });
-  db.run(`INSERT INTO feeding_logs (idadi, abw_gramu, joto, do_mg, feed_response, biomass_kg, target_feed_kg, adjusted_feed_kg, environmental_multiplier, confidence, category, sababu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [idadi, abw, joto, do_mg, feed_response, matokeo.biomass_kg, matokeo.target_feed_kg, matokeo.adjusted_feed_kg, matokeo.environmental_multiplier, matokeo.confidence, matokeo.category, matokeo.sababu],
-    (err) => { if (err) console.error('Hitilafu ya kuhifadhi:', err.message); else console.log('Rekodi imehifadhiwa!'); });
+  try {
+    const stmt = db.prepare(`INSERT INTO feeding_logs (idadi, abw_gramu, joto, do_mg, feed_response, biomass_kg, target_feed_kg, adjusted_feed_kg, environmental_multiplier, confidence, category, sababu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+    stmt.run(Number(idadi), Number(abw), Number(joto), Number(do_mg), feed_response || 'Normal', matokeo.biomass_kg, matokeo.target_feed_kg, matokeo.adjusted_feed_kg, matokeo.environmental_multiplier, matokeo.confidence, matokeo.category, matokeo.sababu);
+  } catch(e) { console.error(e.message); }
   res.json(matokeo);
 });
 
@@ -337,9 +338,10 @@ app.post('/maji', (req, res) => {
   const { oxygen, temp, ph, aina_mfumo } = req.body;
   if (!oxygen || !temp || !ph || !aina_mfumo) return res.json({ kosa: 'Jaza: oxygen, temp, ph, aina_mfumo' });
   const matokeo = analyzeMaji(Number(oxygen), Number(temp), Number(ph), aina_mfumo);
-  db.run(`INSERT INTO water_logs (joto, do_mg, ph, hali_joto, hali_do, ushauri) VALUES (?, ?, ?, ?, ?, ?)`,
-    [temp, oxygen, ph, matokeo.temperature.hali, matokeo.oxygen.hali, matokeo.oxygen.ushauri],
-    (err) => { if (err) console.error(err.message); });
+  try {
+    const stmt = db.prepare(`INSERT INTO water_logs (joto, do_mg, ph, hali_joto, hali_do, ushauri) VALUES (?, ?, ?, ?, ?, ?)`);
+    stmt.run(Number(temp), Number(oxygen), Number(ph), matokeo.temperature.hali, matokeo.oxygen.hali, matokeo.oxygen.ushauri);
+  } catch(e) { console.error(e.message); }
   res.json(matokeo);
 });
 
@@ -371,26 +373,26 @@ app.post('/daktari', async (req, res) => {
 // AUTH ENDPOINTS
 // ============================================
 
-app.post('/sajili', async (req, res) => {
+app.post('/sajili', (req, res) => {
   const { jina, simu, nywila, role } = req.body;
   if (!jina || !simu || !nywila) {
     return res.json({ kosa: true, ujumbe: 'Jaza jina, simu, na nywila!' });
   }
   try {
-    const user = await sajili(jina, simu, nywila, role || 'mfugaji');
+    const user = sajili(jina, simu, nywila, role || 'mfugaji');
     res.json({ kosa: false, ujumbe: 'Umesajiliwa vizuri!', user });
   } catch (err) {
     res.json({ kosa: true, ujumbe: err.message });
   }
 });
 
-app.post('/ingia', async (req, res) => {
+app.post('/ingia', (req, res) => {
   const { simu, nywila } = req.body;
   if (!simu || !nywila) {
     return res.json({ kosa: true, ujumbe: 'Jaza simu na nywila!' });
   }
   try {
-    const matokeo = await ingia(simu, nywila);
+    const matokeo = ingia(simu, nywila);
     res.json({ kosa: false, ...matokeo });
   } catch (err) {
     res.json({ kosa: true, ujumbe: err.message });
@@ -406,10 +408,12 @@ app.get('/mtumiaji', (req, res) => {
 });
 
 app.get('/historia', (req, res) => {
-  db.all(`SELECT * FROM feeding_logs ORDER BY recorded_at DESC LIMIT 50`, [], (err, rows) => {
-    if (err) return res.json({ kosa: err.message });
+  try {
+    const rows = db.prepare(`SELECT * FROM feeding_logs ORDER BY recorded_at DESC LIMIT 50`).all();
     res.json(rows);
-  });
+  } catch(e) {
+    res.json({ kosa: e.message });
+  }
 });
 
 app.get('/app', (req, res) => {
