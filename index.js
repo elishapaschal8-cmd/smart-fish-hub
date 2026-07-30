@@ -13,13 +13,13 @@ app.use(express.json());
 // ============================================
 
 const KB_FEEDING = [
-  { min_abw: 0,   max_abw: 1,  rate: 22.5, pellet: '0.2-0.5mm(powder)', frequency: 6-8 },
-  { min_abw: 1, max_abw: 5,    rate: 12.0, pellet: '0.8-1.2mm',   frequency: 4-6 },
-  { min_abw: 5,   max_abw: 20,   rate: 8.0,  pellet: '1.5-2.0mm', frequency: 3-4 },
-  { min_abw: 20,  max_abw: 100,  rate: 5.0,  pellet: '2.0-3.0mm',   frequency: 3 },
-  { min_abw: 100, max_abw: 250,  rate: 3.25, pellet: '3.0-4.0mm',   frequency: 3 },
-  { min_abw: 250, max_abw: 400,  rate: 2.75,  pellet: '4mm',   frequency: 2 },
-  { min_abw: 400, max_abw: 9999, rate: 1.35, pellet: '4mm',   frequency: 2 },
+  { min_abw: 0,   max_abw: 1,  rate: 23, pellet: '0.2-0.5mm(powder)', frequency: 6-8 },
+  { min_abw: 1, max_abw: 5,    rate: 13, pellet: '0.8-1.2mm',   frequency: 4-6 },
+  { min_abw: 5,   max_abw: 20,   rate: 9.0,  pellet: '1.5-2.0mm', frequency: 3-4 },
+  { min_abw: 20,  max_abw: 100,  rate: 6.0,  pellet: '2.0-3.0mm',   frequency: 3 },
+  { min_abw: 100, max_abw: 250,  rate: 4.0, pellet: '3.0-4.0mm',   frequency: 3 },
+  { min_abw: 250, max_abw: 400,  rate: 3.25,  pellet: '4mm',   frequency: 2 },
+  { min_abw: 400, max_abw: 9999, rate: 2.35, pellet: '4mm',   frequency: 2 },
 ];
 
 const KB_TEMPERATURE = [
